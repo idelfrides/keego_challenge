@@ -31,3 +31,9 @@ def define_player_number():
     position = randint(1, 4)
     # print_log(str(position))
     return position
+
+
+def make_sound(frequency=None):
+    duration = 1     # second
+    frequency = frequency or 200  # Hz
+    os.system('play -nq -t alsa synth {} sine {}'.format(duration, frequency))
