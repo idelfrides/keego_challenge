@@ -5,7 +5,6 @@ import time
 from utils.libs import (
     print_log, show_info,
     define_player_number,
-    make_sound
 )
 
 from game_manager.lib_manager import PalyerManager
@@ -19,11 +18,19 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
 
     print_log(f'{player.player} MUST WALK [{player.position}] POSITION')
 
+    try:
+        balance = all_player_info[str(player_number)]['balance']
+        if balance < 0:
+            player_game_over.append(player_number)
+    except Exception as err:
+        pass
+
     if player_number in player_game_over:
         print_log(f'GAME IS OVER FOR [ {player.player} ] NUMBER {player_number}')
         return
 
     for walk_ in range(1, player.position + 1):
+
         print_log(f'{player.player} IN POSITION [{walk_}]...')
 
         if walk_ == player.position:
@@ -34,7 +41,6 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
 
             # find player profile to verify what he going to do
             if player_number == 1:  # implulsive one
-                # continue
 
                 if property_board_list[player.position-1] == 0:
                     print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
@@ -49,8 +55,6 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
                         print_log(f'GAME IS OVER FOR [ {player.player} ]...')
                         player_game_over.append(player_number)
                         all_player_info.pop(str(player_number))
-                        print(player_game_over)
-
                     else:
                         property_board_list[player.position-1] = (
                             player_board_content)
@@ -74,7 +78,7 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
                     pass
 
             if player_number == 2:  # demanding  player
-                # continue
+
                 if property_board_list[player.position-1] == 0:
                     print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
 
@@ -93,7 +97,6 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
                         print_log(f'GAME IS OVER FOR [ {player.player} ]...')
                         player_game_over.append(player_number)
                         all_player_info.pop(str(player_number))
-                        # continue
                     else:
                         property_board_list[player.position-1] = (
                             player_board_content
@@ -117,7 +120,7 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
                     pass
 
             if player_number == 3:  # cautious one
-                # import pdb; pdb.set_trace()
+
                 try:
                     player.money = all_player_info[str(player_number)]['balance']
                 except Exception as err:
@@ -171,7 +174,6 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
                     if player_board_content == 0:
                         continue
 
-                    # print_log(f'{player_board_content}')
                     all_player_info[str(player_number)] = player_info
 
                     if all_player_info[str(player_number)]['balance'] < 0:
@@ -247,16 +249,15 @@ def calculate_winner(all_player_info):
 if __name__ == '__main__':
 
     simulations = 1
+    simulations = 300
     winner_behavior = []
-
-    simulations = 50
     simul = 1
 
     while simul < simulations:
 
         print_log(f'\n\n\n SIMULATION/PARTIDA --> {simulations}\n\n\n')
 
-        ROUNDS = 50
+        ROUNDS = 1000
         player_game_over = []
         round_by_simulation = []
         all_player_info = {}
@@ -277,12 +278,10 @@ if __name__ == '__main__':
 
             # print(f'\n\n player game over \n\n {player_game_over}')
             # print(f'\n\n property owner list \n\n {property_board_list}')
-            print(f'\n\n all player info \n\n {all_player_info}')
+            # print(f'\n\n all player info \n\n {all_player_info}')
 
             player_number += 1  # next player
             time.sleep(0)
-
-            print_log(f'GOME OVER BY ROUND {round}')
 
         for key, value_ in all_player_info.items():
             players_dict_info[key] = value_
@@ -308,11 +307,12 @@ if __name__ == '__main__':
     round_mean = sum(round_by_simulation)/simulations
 
     print('-'*80)
-    print('\n GAME RESULTS \n')
+    print(f'  GOME OVER BY ROUND {round}')
+    print('\n  GAME RESULTS \n')
     print('-'*40)
 
     print(f'\n PARTIDAS POR TIME OUT: {game_over_by_complete_round}')    # 1
-    print(f'\n MÉDIA DE RODADAS POR PARTIDA : {round_mean}')           # 2
+    print(f'\n MÉDIA DE RODADAS POR PARTIDA : {round_mean}')             # 2
     print(f'\n TAXA DE VITORIAS DO IMPULSIVO: {percentual_vitoria_1}')   # 3
     print(f'\n TAXA DE VITORIAS DO EXIGENTE: {percentual_vitoria_2}')
     print(f'\n TAXA DE VITORIAS DO CAUTELOSO: {percentual_vitoria_3}')
