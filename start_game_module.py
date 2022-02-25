@@ -318,7 +318,6 @@ if __name__ == '__main__':
     percentual_vitoria_3 = (wb_counter[2]/simulations) *100
     percentual_vitoria_4 = (wb_counter[3]/simulations) *100
 
-    # round_mean = sum(round_by_simulation)/len(round_by_simulation)
     round_mean = sum(round_by_simulation)/simulations
 
     print('-'*80)
