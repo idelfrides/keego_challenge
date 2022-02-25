@@ -1,14 +1,12 @@
 
 # rent_value = valor de aluguel
 
-from random import randint
 
 # ---------------------------------------
 # importing modules
 # ---------------------------------------
-from ijpypostgresql.Crud_oper import CrudOperations
-from ijpypostgresql.ModulePostgreSQLdb import ModulePostgreSQLdb
 from utils.libs import print_log
+from random import randint
 
 class PalyerManager(object):
 
