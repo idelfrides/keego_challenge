@@ -142,10 +142,6 @@ class PalyerManager(object):
         property_dict = self.get_land_property()
         new_balance = self.money - property_dict['sell_value']
 
-        print('-'*80)
-        print(f'\n player 3: new_balance = {new_balance} \n')
-        print('-'*80)
-
         if new_balance == 80:
             property_dict['name'] = 'FRANCE'
             property_dict['position'] = self.position
@@ -170,10 +166,6 @@ class PalyerManager(object):
         print_log(f'RANDOM PALYER BUYS BUYS THE PROPERTY HE LANDS ON WITH A 50% PROBABILITY')
 
         buy = randint(1, 50)
-        print('-'*80)
-        print(f'\n player 4 : probabilidade = {buy}\n')
-        print('-'*80)
-
         if buy == 50:      # 50%
             property_dict = self.get_land_property()
 
