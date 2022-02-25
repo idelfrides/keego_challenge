@@ -29,177 +29,195 @@ def run_game(round, player_number, player_game_over, property_board_list, all_pl
         print_log(f'GAME IS OVER FOR [ {player.player} ] NUMBER {player_number}')
         return
 
-    for walk_ in range(1, player.position + 1):
+    board_lenght = 20
+    min_position = 1
 
-        print_log(f'{player.player} IN POSITION [{walk_}]...')
+    while True:
+        for walk_ in range(min_position, player.position + 1):
 
-        if walk_ == player.position:
+            print_log(f'{player.player} IN POSITION [{walk_}]...')
 
-            print_log(
-                f'{player.player} GETS HIS END POSITION [{walk_}]...'
-            )
+            if walk_ == player.position:
 
-            # find player profile to verify what he going to do
-            if player_number == 1:  # implulsive one
+                print_log(
+                    f'{player.player} GETS HIS END POSITION [{walk_}]...'
+                )
 
-                if property_board_list[player.position-1] == 0:
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
+                # find player profile to verify what he going to do
+                if player_number == 1:  # implulsive one
 
-                    player_info, player_board_content = player.buy_land_property_player_1(
-                        player_number, all_player_info
-                    )
+                    if property_board_list[player.position-1] == 0:
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
 
-                    all_player_info[str(player_number)] = player_info
-
-                    if all_player_info[str(player_number)]['balance'] < 0:
-                        print_log(f'GAME IS OVER FOR [ {player.player} ]...')
-                        player_game_over.append(player_number)
-                        all_player_info.pop(str(player_number))
-                    else:
-                        property_board_list[player.position-1] = (
-                            player_board_content)
-
-                # property belong to other plyer
-                elif not property_board_list[player.position-1].get(str(player_number)):
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
-
-                    player_info, other_player_property = (
-                        player.pay_rent_for_property(
-                        player_number,  all_player_info, property_board_list)
-                    )
-
-                    all_player_info[str(player_number)] = player_info
-                    property_board_list[player.position-1] = (
-                        other_player_property
-                    )
-
-                else:
-                    # property belong to this player
-                    pass
-
-            if player_number == 2:  # demanding  player
-
-                if property_board_list[player.position-1] == 0:
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
-
-                    player_info, player_board_content = player.buy_land_property_player_2(
-                        player_number, all_player_info
-                    )
-
-                    if player_board_content == 0:
-                        break
-
-                    all_player_info[str(player_number)] = player_info
-
-                    print_log(f'{player_board_content}')
-
-                    if all_player_info[str(player_number)]['balance'] < 0:
-                        print_log(f'GAME IS OVER FOR [ {player.player} ]...')
-                        player_game_over.append(player_number)
-                        all_player_info.pop(str(player_number))
-                    else:
-                        property_board_list[player.position-1] = (
-                            player_board_content
+                        player_info, player_board_content = player.buy_land_property_player_1(
+                            player_number, all_player_info
                         )
 
-                # property belong to other plyer
-                elif not property_board_list[player.position-1].get(str(player_number)):
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
+                        all_player_info[str(player_number)] = player_info
 
-                    player_info, other_player_property = (
-                        player.pay_rent_for_property(
-                        player_number, all_player_info, property_board_list)
-                    )
+                        if all_player_info[str(player_number)]['balance'] < 0:
+                            print_log(f'GAME IS OVER FOR [ {player.player} ]...')
+                            player_game_over.append(player_number)
+                            all_player_info.pop(str(player_number))
+                        else:
+                            property_board_list[player.position-1] = (
+                                player_board_content)
 
-                    all_player_info[str(player_number)] = player_info
-                    property_board_list[player.position-1] = (
-                        other_player_property
-                    )
-                else:
-                    # property belong to this player
-                    pass
+                    # property belong to other plyer
+                    elif not property_board_list[player.position-1].get(str(player_number)):
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
 
-            if player_number == 3:  # cautious one
-
-                try:
-                    player.money = all_player_info[str(player_number)]['balance']
-                except Exception as err:
-                    print_log(f'EXCEPTION: {err}')
-
-                if property_board_list[player.position-1] == 0:
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
-
-                    player_info, player_board_content = player.buy_land_property_player_3(
-                        player_number)
-
-                    if player_board_content == 0:   # não comprou
-                        continue
-
-                    all_player_info[str(player_number)] = player_info
-
-                    if all_player_info[str(player_number)]['balance'] < 0:
-                        print_log(f'GAME IS OVER FOR [ {player.player} ]...')
-                        player_game_over.append(player_number)
-                        all_player_info.pop(str(player_number))
-                    else:
-                        # on the game
-                        property_board_list[player.position-1] = (
-                            player_board_content
+                        player_info, other_player_property = (
+                            player.pay_rent_for_property(
+                            player_number,  all_player_info, property_board_list)
                         )
 
-                # property belong to other plyer
-                elif not property_board_list[player.position-1].get(str(player_number)):
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
-
-                    player_info, other_player_property = (
-                        player.pay_rent_for_property(
-                        player_number, all_player_info, property_board_list)
-                    )
-
-                    all_player_info[str(player_number)] = player_info
-                    property_board_list[player.position-1] = (
-                        other_player_property
-                    )
-                else:
-                    pass
-
-            if player_number == 4:  # random one
-                if property_board_list[player.position-1] == 0:
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
-
-                    player_info, player_board_content = player.buy_land_property_player_4(
-                        player_number, all_player_info
-                    )
-
-                    if player_board_content == 0:
-                        continue
-
-                    all_player_info[str(player_number)] = player_info
-
-                    if all_player_info[str(player_number)]['balance'] < 0:
-                        print_log(f'GAME IS OVER FOR [ {player.player} ]...')
-                        player_game_over.append(player_number)
-                        all_player_info.pop(str(player_number))
-                    else:
+                        all_player_info[str(player_number)] = player_info
                         property_board_list[player.position-1] = (
-                            player_board_content
+                            other_player_property
                         )
 
-                # property belong to other plyer
-                elif not property_board_list[player.position-1].get(str(player_number)):
-                    print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
+                    else:
+                        # property belong to this player
+                        pass
 
-                    player_info, other_player_property = (
-                        player.pay_rent_for_property(
-                        player_number, all_player_info, property_board_list)
-                    )
+                if player_number == 2:  # demanding  player
 
-                    all_player_info[str(player_number)] = player_info
-                    property_board_list[player.position-1] = (
-                        other_player_property
-                    )
-                else:
-                    pass
+                    if property_board_list[player.position-1] == 0:
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
+
+                        player_info, player_board_content = player.buy_land_property_player_2(
+                            player_number, all_player_info
+                        )
+
+                        if player_board_content == 0:
+                            break
+
+                        all_player_info[str(player_number)] = player_info
+
+                        print_log(f'{player_board_content}')
+
+                        if all_player_info[str(player_number)]['balance'] < 0:
+                            print_log(f'GAME IS OVER FOR [ {player.player} ]...')
+                            player_game_over.append(player_number)
+                            all_player_info.pop(str(player_number))
+                        else:
+                            property_board_list[player.position-1] = (
+                                player_board_content
+                            )
+
+                    # property belong to other plyer
+                    elif not property_board_list[player.position-1].get(str(player_number)):
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
+
+                        player_info, other_player_property = (
+                            player.pay_rent_for_property(
+                            player_number, all_player_info, property_board_list)
+                        )
+
+                        all_player_info[str(player_number)] = player_info
+                        property_board_list[player.position-1] = (
+                            other_player_property
+                        )
+                    else:
+                        # property belong to this player
+                        pass
+
+                if player_number == 3:  # cautious one
+
+                    try:
+                        player.money = all_player_info[str(player_number)]['balance']
+                    except Exception as err:
+                        print_log(f'EXCEPTION: {err}')
+
+                    if property_board_list[player.position-1] == 0:
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
+
+                        player_info, player_board_content = player.buy_land_property_player_3(
+                            player_number)
+
+                        if player_board_content == 0:   # não comprou
+                            continue
+
+                        all_player_info[str(player_number)] = player_info
+
+                        if all_player_info[str(player_number)]['balance'] < 0:
+                            print_log(f'GAME IS OVER FOR [ {player.player} ]...')
+                            player_game_over.append(player_number)
+                            all_player_info.pop(str(player_number))
+                        else:
+                            # on the game
+                            property_board_list[player.position-1] = (
+                                player_board_content
+                            )
+
+                    # property belong to other plyer
+                    elif not property_board_list[player.position-1].get(str(player_number)):
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
+
+                        player_info, other_player_property = (
+                            player.pay_rent_for_property(
+                            player_number, all_player_info, property_board_list)
+                        )
+
+                        all_player_info[str(player_number)] = player_info
+                        property_board_list[player.position-1] = (
+                            other_player_property
+                        )
+                    else:
+                        pass
+
+                if player_number == 4:  # random one
+                    if property_board_list[player.position-1] == 0:
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] IS AVAILABLE TO BUY')
+
+                        player_info, player_board_content = player.buy_land_property_player_4(
+                            player_number, all_player_info
+                        )
+
+                        if player_board_content == 0:
+                            continue
+
+                        all_player_info[str(player_number)] = player_info
+
+                        if all_player_info[str(player_number)]['balance'] < 0:
+                            print_log(f'GAME IS OVER FOR [ {player.player} ]...')
+                            player_game_over.append(player_number)
+                            all_player_info.pop(str(player_number))
+                        else:
+                            property_board_list[player.position-1] = (
+                                player_board_content
+                            )
+
+                    # property belong to other plyer
+                    elif not property_board_list[player.position-1].get(str(player_number)):
+                        print_log(f'PROPERTY IN POSITION [ {player.position} ] HAS AN OWNER')
+
+                        player_info, other_player_property = (
+                            player.pay_rent_for_property(
+                            player_number, all_player_info, property_board_list)
+                        )
+
+                        all_player_info[str(player_number)] = player_info
+                        property_board_list[player.position-1] = (
+                            other_player_property
+                        )
+                    else:
+                        pass
+
+        min_position = player.position
+        player.position += 1
+
+        if player.position > board_lenght:
+            updated_balance = player.round_completed()
+
+            try:
+                all_player_info[str(player_number)]['balance'] += updated_balance
+            except Exception as err:
+                print_log(f'EXCEPTION: {err}')
+
+            break
+
 
     return
 
@@ -276,10 +294,6 @@ if __name__ == '__main__':
             run_game(round, player_number, player_game_over,
                 property_board_list, all_player_info)
 
-            # print(f'\n\n player game over \n\n {player_game_over}')
-            # print(f'\n\n property owner list \n\n {property_board_list}')
-            # print(f'\n\n all player info \n\n {all_player_info}')
-
             player_number += 1  # next player
             time.sleep(0)
 
@@ -292,6 +306,7 @@ if __name__ == '__main__':
         round_by_simulation.append(round)
 
         simul += 1
+
 
     winner_by_bahavior, winner_behavior_counter = (
         calculate_winner(winner_behavior)
@@ -307,7 +322,7 @@ if __name__ == '__main__':
     round_mean = sum(round_by_simulation)/simulations
 
     print('-'*80)
-    print(f'  GOME OVER BY ROUND {round}')
+    print(f'GOME OVER BY ROUND {round}')
     print('\n  GAME RESULTS \n')
     print('-'*40)
 
@@ -317,6 +332,6 @@ if __name__ == '__main__':
     print(f'\n TAXA DE VITORIAS DO EXIGENTE: {percentual_vitoria_2}')
     print(f'\n TAXA DE VITORIAS DO CAUTELOSO: {percentual_vitoria_3}')
     print(f'\n TAXA DE VITORIAS DO ALEATÓRIO: {percentual_vitoria_4}')
-    print(f'\n COMPORTAMENTO MAIS VENCEDOR: {winner_by_bahavior}')        # 4
+    print(f'\n COMPORTAMENTO MAIS VENCEDOR: {winner_by_bahavior}')       # 4
 
     print('-'*80)
