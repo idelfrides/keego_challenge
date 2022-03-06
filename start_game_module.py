@@ -266,7 +266,6 @@ def calculate_winner(all_player_info):
 
 if __name__ == '__main__':
 
-    simulations = 1
     simulations = 300
     winner_behavior = []
     simul = 1
